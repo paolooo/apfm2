@@ -1,0 +1,65 @@
+'use strict';
+var getJson, playlistBuilder;
+
+getJson = function(url, callback, $http) {
+  return $http({
+    method: 'GET',
+    url: url
+  }).success(function(data, status, headers, config) {
+    return callback(data, $http);
+  }).error(function(data, status, headers, config) {
+    return console.log('error json');
+  });
+};
+
+playlistBuilder = function(json, $http) {
+  var i, ul, _fnBuildEpisode, _fnDuration, _results;
+
+  ul = jQuery('<ul/>');
+  jQuery(ul).appendTo('#playlist #main');
+  _fnDuration = function(s) {
+    var t, _m, _s;
+
+    _s = s % 60;
+    _m = Math.floor(s / 60);
+    t = _m <= 60 ? "M" : "H";
+    return "" + _m + " " + t;
+  };
+  _fnBuildEpisode = function(data, $http) {
+    var li;
+
+    li = jQuery('<li/>').append(jQuery("<div class='thumb'><a href='" + data.url + "'><img src=''></a></div>")).append(jQuery("<div class='title'><a href='" + data.url + "'>" + data.title + "</a></div>")).append(jQuery("<div class='control'><a class='icon play' href='" + data.url + "'><div class='before' /></a><span class='icon phone'><div class='before'/> <abbr>" + (_fnDuration(data.duration)) + "</abbr></span></div>"));
+    jQuery(ul).append(li);
+    data.li = li;
+    return getJson(data.lookup, function(d) {
+      if (typeof d.imageURL !== 'undefined') {
+        return jQuery('.thumb img', data.li).each(function(index) {
+          return jQuery(this).attr('src', 'http://res.cloudinary.com/playerfm/image/fetch/d_graymike-bg.png,w_90,h_90/' + d.imageURL);
+        });
+      }
+    }, $http);
+  };
+  i = 0;
+  _results = [];
+  while (i < json.episodes.length) {
+    _results.push(_fnBuildEpisode(json.episodes[i++], $http));
+  }
+  return _results;
+};
+
+var BlogCtrl;
+
+BlogCtrl = function($scope) {
+  return $scope.title = "Sample Blog Page";
+};
+
+var HomeCtrl, urlJsonPlaylist;
+
+urlJsonPlaylist = [];
+
+urlJsonPlaylist['wordpress'] = 'https://player.fm/3/714/at/1367612251.json?episode_detail=full&series_detail=full';
+
+HomeCtrl = function($scope, $http) {
+  $scope.title = 'Wordpress';
+  return getJson(urlJsonPlaylist['wordpress'], playlistBuilder, $http);
+};

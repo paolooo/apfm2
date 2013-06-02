@@ -7,7 +7,7 @@
 
 .playlist ul{list-style-type:none;float:left;clear:both;width:100%;}
 .playlist ul li{border:1px solid #ddd;background:#fff;float:left;width:100%;clear:both;min-height:90px;margin-bottom:8px;clear:both;position:relative;}
-.playlist ul li .thumb{float:left;margin-right:5px;}
+.playlist ul li .thumb{float:left;margin-right:5px;height:90px;}
 .playlist ul li .thumb img{float:left}
 .playlist ul li .episode{float:left;padding:8px 76px 8px 95px;margin-top:-90px;clear:both;}
 .playlist ul li .episode a{height:40px;overflow:hidden;text-overflow:ellipsis;display:table-cell;vertical-align:bottom;color:#333;text-decoration:none;font-size:1em;line-height:120%}

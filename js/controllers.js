@@ -26,9 +26,12 @@ playlistBuilder = function(json, $http) {
     return "" + _m + " " + t;
   };
   _fnBuildEpisode = function(data, $http) {
-    var li;
+    var duration, li, published, today;
 
-    li = jQuery('<li/>').append(jQuery("<div class='thumb'><a href='" + data.url + "'><img src=''></a></div>")).append(jQuery("<div class='title'><a href='" + data.url + "'>" + data.title + "</a></div>")).append(jQuery("<div class='control'><a class='icon play' href='" + data.url + "'><div class='before' /></a><span class='icon phone'><div class='before'/> <abbr>" + (_fnDuration(data.duration)) + "</abbr></span></div>"));
+    today = new Date;
+    published = new Date(data.publishedAt * 1000);
+    duration = moment.duration((today - published) / 1000, 'seconds').humanize();
+    li = jQuery('<li/>').append(jQuery("<div class='thumb'><a href='" + data.url + "'><img src=''></a></div>")).append(jQuery("<div class='control'><a class='icon play' href='" + data.url + "'><div class='before' /></a><span class='icon phone'><div class='before'/> <abbr>" + (_fnDuration(data.duration)) + "</abbr></span></div>")).append(jQuery("<div class='episode'><a href='" + data.url + "'>" + data.title + "</a><div class='duration'>" + duration + "</div></div>"));
     jQuery(ul).append(li);
     data.li = li;
     return getJson(data.lookup, function(d) {

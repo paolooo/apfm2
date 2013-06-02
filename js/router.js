@@ -6,6 +6,8 @@
     }).when('/blog', {
       templateUrl: 'blog/index.html',
       controller: 'BlogCtrl'
+    }).when('/e2e', {
+      templateUrl: 'e2e.html'
     });
   });
 
